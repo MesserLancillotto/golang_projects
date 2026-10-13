@@ -1,0 +1,81 @@
+\documentclass{book}
+\usepackage{amssymb}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\title{IA - genetic algorithms \\
+\large Condensazione dei risultati dello studio di IA usanti algoritmi genetici}
+\author{Lancillotto Benacense}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\chapter{Wordle}
+Siano definiti
+\begin{itemize}
+    \item $\mathbb{A}$ l'insieme delle lettere minuscole dell'alfabeto latino e dal carattere spazio
+    \item $l$ la lunghezza della generica stringa $\sigma$ presa in considerazione ($ \sigma \in \mathbb{A}^{l})$ 
+    \item $d$ una distanza (che definiremo come la distanza di Hamming normalizzata)
+    \item $\delta_{i,j}$ la delta di Kronecker
+    \item $k \leftarrow K$ un elemento $k$ preso a caso dall'insieme $K$
+        \item $x_{i} \in X$ è l'i-esimo elemendo di $x \in X^{l}$, con $i\in \{-l, l\}\backslash\{0\} \subset \mathbb{Z}$ dove il primo elemento è sempre $i=1$ e per valori negativi di $i$ si inizia a contare dal fondo ($x_{-1}$ è l'ultimo elemento, $x_{-2}$ il penultimo, eccetera) 
+    \item $\bigotimes_{i=1}^{l} x_{i} = x_{1}x_{2}\cdots x_{l}$ la concatenazione di una stringa dove $\bigotimes_{i=1}^{l} x_{i} = x$
+    \item $\bigotimes_{i=1}^{n} \rho(\alpha)$ l'insieme di $n$ stringhe di lunghezza $l$ generate dalla funzione $\rho(\alpha)$ (dove $\rho$ sta per "rule", ed $\alpha$ può essere qualsiasi cosa, purché $\rho(\alpha) \in \mathbb{A}^{l}$)  
+    \item $\mathbb{B} = \{0, 1\} \subset \mathbb{N}$ l'insieme dei numeri binari
+    \item $\neg x : x \in \mathbb{B} = (1 - x)$
+\end{itemize}
+allora definiamo lo spazio metrico $(\mathbb{A}^{l}, d)$ dove 
+\begin{align*}
+    d : \mathbb{A}^{l} \times \mathbb{A}^{l} & \rightarrow [0, 1] \\
+    (x, y) & \rightarrow  1 - \frac{1}{l} \sum_{i = 1}^{l} \delta_{x_{i}, y_{i}}
+\end{align*}
+Sia definito il vettore di selezione $\sigma$ e quello di mutazione $m$: 
+\begin{align*}
+& \sigma \leftarrow \mathbb{B}^{l} : k = \sum_{i=1}^{l} x_{i} \implies \begin{cases}
+k = \frac{l}{2} & \quad \text{ se } l \in 2\mathbb{N} \\
+l - k = \pm 1 & \quad \text{ altrimenti}
+\end{cases} \\
+& m \leftarrow \mathbb{B}^{l} : \sum_{i=1}^{l} m_{i}= t
+\end{align*}
+dunque metà dei valori di $\sigma$ saranno $0$ e l'altra metà $1$, mentre $m$ conterrà esattamente $t$ valori  non nulli, con $t/l$ tasso di mutazione. Definiamo la funzione di "riproduzione" $r$ che dati due "genitori", $\pi, \mu$ computa i figli trattando le lettere delle stringhe come geni, e selezionando metà dei geni del padre e metà della madre, più introducendo una mutazione casuale. La funzione $r$ sarà definita, dato $k \leftarrow \mathbb{A}^{l}$ come 
+\begin{gather*}
+r : \mathbb{A}^{l} \times \mathbb{A}^{l} \rightarrow A^{l} \\
+\pi, \mu \rightarrow \bigotimes_{i=1}^{l}\neg m_{i}(\pi_{i} \cdot \sigma_{i} + \mu_{i} \cdot \neg\sigma_{i}) + m_{i}k_{i}
+\end{gather*}
+
+\paragraph{} Vogliamo ora indovinare una stringa segreta $s$. Data una popolazione $p \leftarrow \mathbb{A}^{l \times \#p}$, dunque $\#p$ (con $\#$ la cardinalità) stringhe di lunghezza $l$ definiamo la funzione $b$ (di "best") che computa i genitori della prossima generazione, data la "fitness" $f = 1 - d(s, p_{i})$, $b$ computa le due stringhe più vicine ad $s$,
+\begin{gather*}
+    b : \mathbb{A}^{\#p \times l} \rightarrow \mathbb{A}^{2 \times l} \\ p \rightarrow (\pi, \mu) : \begin{cases} d(s, \pi) \leq d(s, x_{i}) \ \forall x_{i} \in p \\ d(s, \mu) \leq d(s, x_{i}) \ \forall x_{i} \in p \backslash \{\pi\} \end{cases}
+\end{gather*}
+allora data $p_{i}$ la i-esima generazione, l'algoritmo euristico di scoperta di $s$ sarà, dato il numero di elementi della popolazione $\#p$ scelti a priori
+\begin{align*}
+p_{1} & \leftarrow \mathbb{A}^{l \times \# p} \\
+\text{ se } \nexists x \in p_{-1} : d(s, x) = 0 \\
+p = p \cup p_{i + 1} : p_{i + 1} & = \bigotimes_{i = 1}^{\#p}r(b(p_{i - 1}))
+\end{align*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
